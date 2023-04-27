@@ -6,6 +6,6 @@ interface Describable {
     val identifier: String get() = description
         .split(" ")
         .joinToString(separator = "") {
-            it.lowercase().replaceFirstChar { char -> char.uppercaseChar() }
+            it.toLowerCase().replaceRange(0, 1, "${it.first().toUpperCase()}")
         }
 }

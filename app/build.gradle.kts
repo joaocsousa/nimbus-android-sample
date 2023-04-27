@@ -6,7 +6,7 @@ plugins {
     id("nimbus.app")
 }
 
-val nimbusVersion = "2.6.1"
+val nimbusVersion = "2.7.0"
 
 /* The compileSdk, minSdk, and targetSdk are applied in the build-logic/src/main/kotlin/nimbus.app.gradle.kts plugin */
 android {
@@ -14,8 +14,13 @@ android {
         buildConfig = true
         viewBinding = true
     }
+
+    compileSdk = 31
+
     defaultConfig {
         applicationId = "com.adsbynimbus.android.sample"
+        minSdk = 21
+        targetSdk = 31
         versionCode = 1
         versionName = nimbusVersion
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -26,6 +31,10 @@ android {
         buildConfigField("String", "PUBLISHER_KEY", "\"${property("sample_publisher_key")}\"")
         buildConfigField("String", "API_KEY", "\"${property("sample_api_key")}\"")
     }
+
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
 
     namespace = "com.adsbynimbus.android.sample"
 }
@@ -49,7 +58,7 @@ androidComponents.onVariants { variant ->
             "sample_unity_game_id",
     ).forEach {
         variant.buildConfigFields.put(
-            it.substringAfter("sample_").uppercase(),
+            it.substringAfter("sample_").toUpperCase(),
             providers.gradleProperty(it).map { key -> BuildConfigField("String", "\"$key\"", "") },
         )
     }
@@ -61,6 +70,7 @@ androidComponents.onVariants { variant ->
 dependencies {
     /* Nimbus (Version is defined by the project version above) */
     api("com.adsbynimbus.android:nimbus:$nimbusVersion")
+    api("com.adsbynimbus.openrtb:kotlin-android:1.0.0")
 
     /* APS Demand */
     api("com.adsbynimbus.android:extension-aps:$nimbusVersion")
@@ -79,22 +89,21 @@ dependencies {
     api("com.unity3d.ads:unity-ads:4.6.1")
 
     /* Androidx Libraries */
-    api("androidx.activity:activity-ktx:1.7.1")
-    api("androidx.annotation:annotation:1.6.0")
-    api("androidx.annotation:annotation-experimental:1.3.0")
-    api("androidx.appcompat:appcompat:1.6.1")
-    api("androidx.core:core-ktx:1.10.0")
-    api("androidx.fragment:fragment-ktx:1.5.7")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    api("androidx.activity:activity-ktx:1.5.0")
+    api("androidx.annotation:annotation:1.3.0")
+    api("androidx.appcompat:appcompat:1.4.2")
+    api("androidx.core:core-ktx:1.7.0")
+    api("androidx.fragment:fragment-ktx:1.5.6")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     api("androidx.navigation:navigation-fragment:2.5.3")
     api("androidx.navigation:navigation-runtime:2.5.3")
     api("androidx.navigation:navigation-ui:2.5.3")
     api("androidx.preference:preference-ktx:1.2.0")
-    api("androidx.recyclerview:recyclerview:1.3.0")
+    api("androidx.recyclerview:recyclerview:1.2.1")
     api("androidx.startup:startup-runtime:1.1.1")
 
     /* Material */
-    api("com.google.android.material:material:1.8.0")
+    api("com.google.android.material:material:1.6.0")
 
     /* Networking Client */
     api("com.squareup.okhttp3:okhttp:4.10.0")
@@ -104,18 +113,15 @@ dependencies {
     api("com.jakewharton.timber:timber:5.0.1")
 
     /** Transitive Dependencies we want updated to the latest */
-    api("androidx.browser:browser:1.5.0")
+    api("com.google.ads.interactivemedia.v3:interactivemedia:3.24.0")
+    api("androidx.browser:browser:1.4.0")
     api("androidx.collection:collection-ktx:1.2.0")
     api("androidx.constraintlayout:constraintlayout:2.1.4")
     api("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
-    api("androidx.room:room-runtime:2.5.1")
+    api("androidx.room:room-runtime:2.4.0")
     api("androidx.transition:transition:1.4.1")
-    api("androidx.work:work-runtime:2.8.1")
-    api("com.squareup.okio:okio:3.3.0")
+    api("androidx.work:work-runtime:2.7.0")
 
-    /* Do not upgrade to 3.30.1; an error preventing the ad load needs to be resolved */
-    api("com.google.ads.interactivemedia.v3:interactivemedia:3.29.0")
-
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0-RC")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
     api("org.jetbrains:annotations:24.0.0")
 }

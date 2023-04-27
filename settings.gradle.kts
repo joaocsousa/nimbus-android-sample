@@ -33,6 +33,7 @@ dependencyResolutionManagement {
                 includeGroupByRegex(".*\\.adsbynimbus.*")
             }
         }
+        mavenLocal()
     }
 }
 
